@@ -80,7 +80,7 @@ Workflow запускается только с `main`. Он ставит зав
 
 Локально смотреть черновик журнала: `npm run changelog`. Версию и тег выпускает CI, локальный `changelogen --release` версию не публикует.
 
-У changelogen версии `0.x` ломают semver: `--major` от `0.0.0` даёт `0.1.0`. Поэтому до первого тега workflow вызывает `changelogen --bump -r 1.0.0`.
+У changelogen версии `0.x` ломают semver: `--major` от `0.0.0` даёт `0.1.0`. Поэтому до первого тега workflow вызывает `changelogen --bump -r 1.0.0`. Если в `package.json` уже стоит `1.0.0`, changelogen завершается с ошибкой: версия не меняется. Workflow сначала ставит `0.0.0` и заменяет `CHANGELOG.md`, затем вызывает эту команду. Строка `fatal: No names found` от `git describe` без тегов шаг не роняет.
 
 ## Лицензия
 

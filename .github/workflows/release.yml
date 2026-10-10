@@ -56,6 +56,12 @@ jobs:
 
           if [ -z "$(git tag --list)" ]; then
             echo "No git tags: first changelogen release is 1.0.0"
+            current="$(node -p "require('./package.json').version")"
+            if [ "$current" = "1.0.0" ]; then
+              echo "package.json is already 1.0.0; changelogen exits when the release version does not change"
+              node -e 'const fs = require("node:fs"); const pkg = JSON.parse(fs.readFileSync("package.json", "utf8")); pkg.version = "0.0.0"; fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");'
+            fi
+            printf '# Changelog\n' > CHANGELOG.md
             npx --no -- changelogen --bump -r 1.0.0
           else
             npx --no -- changelogen --bump "--${BUMP}"

@@ -80,7 +80,7 @@ The workflow runs from `main` only. It installs dependencies, updates `package.j
 
 Preview the changelog locally with `npm run changelog`. CI publishes the version and the tag. A local `changelogen --release` does not.
 
-changelogen remaps semver on `0.x`: `--major` from `0.0.0` becomes `0.1.0`. Until the first tag exists, the workflow runs `changelogen --bump -r 1.0.0`.
+changelogen remaps semver on `0.x`: `--major` from `0.0.0` becomes `0.1.0`. Until the first tag exists, the workflow runs `changelogen --bump -r 1.0.0`. If `package.json` is already `1.0.0`, changelogen exits because the version would not change, so the workflow sets it to `0.0.0` and replaces `CHANGELOG.md` before that command. `git describe` also prints `fatal: No names found` when there are no tags; that line does not fail the step.
 
 ## License
 
