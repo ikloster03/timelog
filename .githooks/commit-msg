@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -e
+
+# Native commit-msg hook: drop Co-authored-by trailers, then Conventional Commits.
+tmp="$(mktemp)"
+grep -v '^Co-authored-by:' "$1" > "$tmp" || true
+mv "$tmp" "$1"
+
+npx --no -- commitlint --edit "$1"
