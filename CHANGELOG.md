@@ -1,18 +1,19 @@
 # Changelog
 
-
 ## v1.0.0
 
 
 ### 🚀 Enhancements
 
-- Add initial project setup ([790faf9](https://github.com/ikloster03/project-template/commit/790faf9))
-- Add MIT License to the project ([6e41c01](https://github.com/ikloster03/project-template/commit/6e41c01))
-- Add English and Russian README files for project documentation ([e22aa81](https://github.com/ikloster03/project-template/commit/e22aa81))
+- Initialize time logging service with Docker setup and PostgreSQL integration ([a2fab0a](https://github.com/ikloster03/timelog/commit/a2fab0a))
 
 ### 🩹 Fixes
 
-- Update package-lock and package.json to include changelogen and additional dependencies ([e32ef46](https://github.com/ikloster03/project-template/commit/e32ef46))
+- Update changelogen workflow to handle existing version 1.0.0 and reset to 0.0.0 if necessary ([3643b67](https://github.com/ikloster03/timelog/commit/3643b67))
+
+### 📖 Documentation
+
+- Add the time logging service draft ([82be5e0](https://github.com/ikloster03/timelog/commit/82be5e0))
 
 ### ❤️ Contributors
 
