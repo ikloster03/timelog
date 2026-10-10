@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: timelog
+      POSTGRES_PASSWORD: timelog
+      POSTGRES_DB: timelog
+    volumes:
+      - timelog-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U timelog -d timelog"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://timelog:timelog@db:5432/timelog
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  timelog-db:

@@ -2,11 +2,43 @@
 
 # timelog
 
-Time logging service. The product outline is in [draft.md](draft.md). Nothing from that draft is implemented yet.
+Time logging service. One deployment is one shared journal in PostgreSQL. Clients reach it over HTTP and MCP with a bearer token. There is no journal UI. The product outline is in [draft.md](draft.md).
 
 Scaffold from [project-template](https://github.com/ikloster03/project-template): OpenSpec for Claude, OpenCode, and Cursor, Conventional Commits, and releases via [changelogen](https://github.com/unjs/changelogen).
 
 Requires Node.js 24 or newer.
+
+## Run
+
+The process reads `DATABASE_URL` and listens on `PORT` (default `3000`). It applies Drizzle migrations before it opens the port. If a migration fails, the process exits and does not listen. The database role needs permission to change the schema.
+
+Create a token inside the app container. The secret is printed once. Send it as `Authorization: Bearer <secret>`.
+
+```sh
+node dist/cli.js token list
+node dist/cli.js token create
+node dist/cli.js token revoke <id>
+```
+
+The API reference is at `/scalar`. Liveness is `GET /health`. Journal routes are under `/logs`. MCP is Streamable HTTP at `/mcp`.
+
+### Postgres alongside
+
+```sh
+docker compose up --build
+docker compose exec app node dist/cli.js token create
+```
+
+Compose starts Postgres with a volume and the app with `DATABASE_URL` pointing at that database. The password in the Compose file is only for this local database.
+
+### External database
+
+`docker-compose.external.yml` starts only the app. Pass the existing URL in `DATABASE_URL`. A database on the same machine is reached as `host.docker.internal`, not `localhost`.
+
+```sh
+DATABASE_URL='postgres://user:pass@host:5432/timelog' docker compose -f docker-compose.external.yml up --build
+docker compose -f docker-compose.external.yml exec app node dist/cli.js token create
+```
 
 ## What is included
 

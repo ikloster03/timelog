@@ -2,11 +2,43 @@
 
 # timelog
 
-Сервис логирования времени. Описание продукта — в [draft.md](draft.md). Из этого черновика пока ничего не реализовано.
+Сервис учёта времени. Одно развёртывание — один общий журнал в PostgreSQL. Клиенты ходят в него по HTTP и MCP с bearer-токеном. Своего интерфейса у журнала нет. Описание продукта — в [draft.md](draft.md).
 
 Каркас из [project-template](https://github.com/ikloster03/project-template): OpenSpec для Claude, OpenCode и Cursor, Conventional Commits и релизы через [changelogen](https://github.com/unjs/changelogen).
 
 Нужен Node.js 24 или новее.
+
+## Запуск
+
+Процесс читает `DATABASE_URL` и слушает `PORT` (по умолчанию `3000`). Миграции Drizzle применяются до открытия порта. Если миграция не прошла, процесс завершается и порт не открывает. Роли в URL нужны права менять схему.
+
+Токен создаётся внутри контейнера приложения. Секрет печатается один раз. Его передают как `Authorization: Bearer <secret>`.
+
+```sh
+node dist/cli.js token list
+node dist/cli.js token create
+node dist/cli.js token revoke <id>
+```
+
+Справочник — `/scalar`. Живость — `GET /health`. Журнал — `/logs`. MCP — Streamable HTTP на `/mcp`.
+
+### Postgres рядом
+
+```sh
+docker compose up --build
+docker compose exec app node dist/cli.js token create
+```
+
+Compose поднимает Postgres с томом и приложение с `DATABASE_URL` на эту базу. Пароль в файле Compose — только для этой локальной базы.
+
+### Внешняя база
+
+`docker-compose.external.yml` поднимает только приложение. Уже доступный адрес передаётся в `DATABASE_URL`. База на той же машине доступна как `host.docker.internal`, не как `localhost`.
+
+```sh
+DATABASE_URL='postgres://user:pass@host:5432/timelog' docker compose -f docker-compose.external.yml up --build
+docker compose -f docker-compose.external.yml exec app node dist/cli.js token create
+```
 
 ## Что внутри
 

@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to the external Postgres URL}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

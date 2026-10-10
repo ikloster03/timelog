@@ -1,12 +1,17 @@
 schema: spec-driven
 
 context: |
-  Domain: time logging. Product outline is draft.md. Do not implement past that draft until asked.
-  Interfaces: HTTP API and MCP. No UI.
-  Auth: private tokens, no OAuth. List, create, and revoke tokens only by commands inside the Docker container.
-  Storage: PostgreSQL for now. Other providers can be added later without changing the API and MCP contract.
-  A log entry has start, end, name, tags, and comment.
-  Tech stack: Node.js
+  Domain: time logging. Product outline is draft.md.
+  One deployment is one user: one app container, one PostgreSQL database, one shared journal.
+  A token is an access key, not an owner. Several clients share the journal.
+  Interfaces: HTTP API and MCP. No product UI. Scalar renders the OpenAPI document.
+  Auth: private bearer tokens, no OAuth. List, create, and revoke tokens only by commands inside the app container.
+  Log entry: id, start, end (empty means still open), name, tags (array of strings), comment.
+  Parallel entries are allowed, including several open ones. Close and update by id.
+  Storage: PostgreSQL via Drizzle ORM. Connect with DATABASE_URL.
+  Postgres may run alongside in Compose or at an external URL. Same code path.
+  API and MCP contracts do not depend on where Postgres runs or on a future storage provider.
+  Tech stack: Node.js 24, TypeScript, Hono, @hono/zod-openapi, @scalar/hono-api-reference, Drizzle ORM, PostgreSQL.
   Commits: Conventional Commits via commitlint. Do not add Co-authored-by trailers.
   Releases: changelogen on GitHub Actions. The first release from 0.0.0 is 1.0.0.
 
