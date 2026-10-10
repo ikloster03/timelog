@@ -1,8 +1,10 @@
 **English** | [Русский](README.ru.md)
 
-# project-template
+# timelog
 
-A Node.js project template: OpenSpec for Claude, OpenCode, and Cursor, Conventional Commits, and releases via [changelogen](https://github.com/unjs/changelogen).
+Time logging service. The product outline is in [draft.md](draft.md). Nothing from that draft is implemented yet.
+
+Scaffold from [project-template](https://github.com/ikloster03/project-template): OpenSpec for Claude, OpenCode, and Cursor, Conventional Commits, and releases via [changelogen](https://github.com/unjs/changelogen).
 
 Requires Node.js 24 or newer.
 
